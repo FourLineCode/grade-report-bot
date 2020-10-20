@@ -1,2 +1,2 @@
 .env
-debug.log
+**/debug.log
