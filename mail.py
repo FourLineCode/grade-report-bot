@@ -8,7 +8,7 @@ from datetime import datetime
 load_dotenv()
 
 
-def sendMail(address, mail_content):
+def send_mail(address, mail_content):
     # The mail addresses and password
     sender_address = os.getenv('BOT_EMAIL')
     sender_pass = os.getenv('BOT_PASSWORD')

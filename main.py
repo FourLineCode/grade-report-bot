@@ -3,7 +3,7 @@ import time
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from dotenv import load_dotenv
-from mail import sendMail
+from mail import send_mail
 
 load_dotenv()
 
@@ -12,8 +12,7 @@ options = webdriver.ChromeOptions()
 options.headless = True
 
 # Initializing chrome driver
-driver = webdriver.Chrome(
-    os.getenv('CHROME_DRIVER_PATH'), options=options)
+driver = webdriver.Chrome(os.getenv('CHROME_DRIVER_PATH'), options=options)
 
 driver.get(os.getenv('PORTAL_URL'))
 print('Driver Initialized ...')
@@ -73,15 +72,18 @@ semester.pop()
 
 GRADE_REPORT += '\n'
 for table in semester:
-    sem = table.find('h6', class_='headingabovetable').get_text(
-    ) + ' ' + table.find_all('tr')[-1].find_all('td')[-1].get_text().lstrip().rstrip() + '\n'
-    GRADE_REPORT += sem
+    semester_name = table.find('h6', class_='headingabovetable').get_text()
+    semester_grade = table.find_all(
+        'tr')[-1].find_all('td')[-1].get_text().lstrip().rstrip()
+
+    semester_report = semester_name + ' ' + semester_grade + '\n'
+    GRADE_REPORT += semester_report
 
 print(GRADE_REPORT)
 
 RECIEVER_ADDRESS = os.getenv('RECIEVER_ADDRESS')
 
 # Send email with Grade Report
-sendMail(RECIEVER_ADDRESS, GRADE_REPORT)
+send_mail(RECIEVER_ADDRESS, GRADE_REPORT)
 
 driver.quit()
